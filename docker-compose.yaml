@@ -1,0 +1,57 @@
+version: "3"
+services:
+  fuga-exporter:
+    build:
+      context: exporter
+    container_name: fuga-exporter
+    hostname: fuga-exporter
+    ports:
+      - "8789:8789"
+    volumes:
+      - .:/usr/src/app/fuga-exporter
+    environment:
+      - OMNICONF_YAML_FILENAME=/usr/src/app/fuga-exporter/configuration.yaml
+    command: python __main__.py
+    depends_on:
+      - redis
+  es-gatherer:
+    build:
+      context: elasticsearch
+    container_name: es-gatherer
+    hostname: es-gatherer
+    environment:
+      - OMNICONF_YAML_FILENAME=/usr/src/app/es-gatherer/configuration.yaml
+    command: python __main__.py
+    depends_on:
+      - elasticsearch
+  prom-gatherer:
+    build:
+      context: prometheus
+    container_name: prom-gatherer
+    hostname: prom-gatherer
+    environment:
+      - OMNICONF_YAML_FILENAME=/usr/src/app/prom-gatherer/configuration.yaml
+    command: python __main__.py
+    depends_on:
+      - prometheus
+
+
+
+  redis:
+    image: redis:4-alpine
+    hostname: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+  elasticsearch:
+    image: elasticsearch:6.4.2
+    hostname: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
