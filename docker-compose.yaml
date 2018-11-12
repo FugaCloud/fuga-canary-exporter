@@ -20,21 +20,26 @@ services:
     container_name: es-gatherer
     hostname: es-gatherer
     environment:
-      - OMNICONF_YAML_FILENAME=/usr/src/app/es-gatherer/configuration.yaml
+      - OMNICONF_YAML_FILENAME=/usr/src/app/fuga-exporter/es-gatherer/configuration.yaml
     command: python __main__.py
     depends_on:
       - elasticsearch
+      - redis
+    volumes:
+      - .:/usr/src/app/fuga-exporter
   prom-gatherer:
     build:
       context: prometheus
     container_name: prom-gatherer
     hostname: prom-gatherer
     environment:
-      - OMNICONF_YAML_FILENAME=/usr/src/app/prom-gatherer/configuration.yaml
+      - OMNICONF_YAML_FILENAME=/usr/src/app/fuga-exporter/prom-gatherer/configuration.yaml
     command: python __main__.py
     depends_on:
       - prometheus
-
+      - redis
+    volumes:
+      - .:/usr/src/app/fuga-exporter
 
 
   redis:
@@ -44,7 +49,9 @@ services:
     ports:
       - "6379:6379"
   prometheus:
-    image: prom/prometheus
+    # image: prom/prometheus
+    build:
+      context: .
     hostname: prometheus
     container_name: prometheus
     ports:
@@ -52,6 +59,15 @@ services:
   elasticsearch:
     image: elasticsearch:6.4.2
     hostname: elasticsearch
+    container_name: elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
+  prometheus-redis:
+    image: oliver006/redis_exporter
+    hostname: prometheus-redis
+    container_name: prometheus-redis
+    environment:
+      - REDIS_ADDR=redis://redis
+    ports:
+      - "9121:9121"
