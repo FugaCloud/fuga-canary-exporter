@@ -50,25 +50,52 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+def index():
+    return "<div><a href='/metrics'>metrics</a></div>"
+
+def metrics():
+    logger.warning('metrics called')
+    if "html" in flask.request.headers['Accept']:
+        return '<pre style="font-size:100%;">' + RedisConnection().create_page() + '\n</pre>'
+    return RedisConnection().create_page() + "\n"
+
+def names():
+    names = RedisConnection().get_applications_keys()
+    dicto = {'status': 'success', 'data': names}
+    return flask.jsonify(dicto)
+
+
 def make_app():
     load_config()
-    app = flask.Flask('prometheus_thingy')
+    app = flask.Flask('fuga_region_exporter')
+    app.add_url_rule("/", 'index', index)
+    app.add_url_rule("/metrics", 'metrics', metrics)
+    app.add_url_rule("/api/v1/label/__name__/values", 'names', names)
 
-    @app.route("/")
-    def index():
-        return "<div><a href='/metrics'>metrics</a></div>"
+    @app.errorhandler(404)
+    def error_page(e):
+        return "<pre>404 page not found</pre>", 404
 
-    @app.route("/metrics")
-    def metrics():
-        logger.warning('metrics called')
-        if "html" in flask.request.headers['Accept']:
-            return '<pre style="font-size:100%;">' + RedisConnection().create_page() + '\n</pre>'
-        return RedisConnection().create_page() + "\n"
+    # @app.errorhandler(404)
+    # def error_page(e):
+    #     return "<pre>404 page not found</pre>", 404
 
-    @app.route("/api/v1/label/__name__/values")
-    def names():
-        names = RedisConnection().get_applications_keys()
-        dicto = {'status': 'success', 'data': names}
-        return flask.jsonify(dicto)
+    # @app.route("/")
+    # def index():
+    #     return "<div><a href='/metrics'>metrics</a></div>"
+
+    # @app.route("/metrics")
+    # def metrics():
+    #     logger.warning('metrics called')
+    #     if "html" in flask.request.headers['Accept']:
+    #         return '<pre style="font-size:100%;">' + RedisConnection().create_page() + '\n</pre>'
+    #     return RedisConnection().create_page() + "\n"
+
+    # @app.route("/api/v1/label/__name__/values")
+    # def names():
+    #     names = RedisConnection().get_applications_keys()
+    #     dicto = {'status': 'success', 'data': names}
+    #     return flask.jsonify(dicto)
 
     return app
