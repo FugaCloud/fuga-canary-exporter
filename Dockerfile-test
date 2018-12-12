@@ -1,3 +1,0 @@
-from prom/prometheus
-
-ADD prometheus-test.yml /etc/prometheus/prometheus.yml

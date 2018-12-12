@@ -1,3 +1,0 @@
-omniconf
-python-dotenv
-redis
