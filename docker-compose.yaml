@@ -1,0 +1,18 @@
+version: "3"
+services:
+  prometheus:
+    build:
+      context: .
+      dockerfile: Dockerfile-prometheus
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+  ping:
+    build:
+      context: .
+    hostname: ping
+    container_name: ping
+    ports:
+      - 8000:8000
+    command: gunicorn 'ping_exporter.main:make_app(**{"config":"ping_exporter/configuration.yaml", "instance_name":"guido"})' -b 0.0.0.0:8000
