@@ -5,6 +5,9 @@ For a quick test run:
 docker-compose up --build
 ```
 
+
+Handy commands:
+
 ```sh
 gunicorn 'ping_exporter.main:make_app(**{"config":"configuration.yaml", "instance-name":"guido"})'
 ```
