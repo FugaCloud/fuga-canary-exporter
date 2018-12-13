@@ -1,4 +1,3 @@
-import time
 import types
 
 import grequests
@@ -11,6 +10,7 @@ wanted_attributes = ['url', 'elapsed', 'status_code', 'ok', 'exception']
 def _example_hook(resp, *args, **kwargs):
     resp.example = 'example'
 
+
 def _exception_handler(request, exception):
     obj = types.SimpleNamespace()
     for attr in wanted_attributes:
@@ -22,6 +22,7 @@ def _exception_handler(request, exception):
         if attr == 'ok':
             obj.ok = False
     return obj
+
 
 def _serialize_return_values(blub):
     for wauw in blub:
@@ -46,23 +47,31 @@ def _serialize_return_values(blub):
             if wauw[attr] is False:
                 wauw[attr] = 0
 
+
 def pong(endpoints, all=True, serialize=True):
     from ping_exporter.main import get_config_from_argv
 
     config, _ = get_config_from_argv()
     data = []
     session = Session()
-    rs = (grequests.get(u, timeout=config.get('time_out', 1), session=session) for u in endpoints)
-    for response in grequests.map(rs, exception_handler=_exception_handler, size=config.get('pool_size', 2)):
+    rs = (grequests.get(u, timeout=config.get('time_out', 1), session=session)
+          for u in endpoints)
+    for response in grequests.map(
+            rs,
+            exception_handler=_exception_handler,
+            size=config.get('pool_size', 2)):
         response_data = {}
         if response is not None:
             for item in wanted_attributes:
                 try:
                     if item == 'elapsed':
-                        response_data.update({item: response.__getattribute__(item).total_seconds()})
+                        response_data.update(
+                            {item:
+                             response.__getattribute__(item).total_seconds()})
                         continue
-                    response_data.update({item: response.__getattribute__(item)})
-                except AttributeError as e:
+                    response_data.update(
+                        {item: response.__getattribute__(item)})
+                except AttributeError:
                     response_data.update({item: None})
 
         data.append(response_data)
@@ -74,7 +83,8 @@ def pong(endpoints, all=True, serialize=True):
             if item == 'url':
                 response_data[item] = 'all'
             if item == 'elapsed':
-                response_data[item] = sum([x['elapsed'] for x in data if x['elapsed']])
+                elapsed = sum([x['elapsed'] for x in data if x['elapsed']])
+                response_data[item] = elapsed
             if item == 'ok':
                 response_data[item] = any([x['ok'] for x in data])
         data.append(response_data)

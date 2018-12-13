@@ -1,5 +1,6 @@
 from ping_exporter.ping import pong, wanted_attributes
 
+
 def generate_name(prefix, extra_tags=None):
     if extra_tags is None:
         return prefix
@@ -12,7 +13,7 @@ def generate_name(prefix, extra_tags=None):
 
 
 def lookup_attribute_to_name(attribute):
-    prefix='probe'
+    prefix = 'probe'
     if attribute == 'elapsed':
         attribute = 'response_time'
 
@@ -32,7 +33,8 @@ def lookup_help(attr_name):
     if attr_name == 'probe_exception':
         _help = 'Indicates if an exception has occurred'
     if attr_name == 'probe_ok':
-        _help = 'Indicates if an endpoint responded with a positive success code'
+        _help = \
+            'Indicates if an endpoint responded with a positive success code'
     if attr_name == 'probe_status_code':
         _help = 'Status code of call'
     if attr_name == 'probe_response_time':
@@ -58,7 +60,10 @@ def make_prometheus_text(return_values):
         if attr_help:
             lines.append(attr_help)
         for rv in return_values:
-            lines.append("{} {}".format(generate_name(attr_name, {"url": rv['url'], "instance": instance_name}), rv[item]))
+            lines.append("{} {}".format(generate_name(
+                attr_name, {"url": rv['url'],
+                            "instance": instance_name}
+                ), rv[item]))
     return lines
 
 
