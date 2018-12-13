@@ -1,0 +1,4 @@
+flask
+grequests
+pyyaml
+gunicorn
