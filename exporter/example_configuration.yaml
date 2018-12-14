@@ -1,6 +1,0 @@
-fuga:
-  exporter:
-    exporters:
-    - elasticsearch
-    - prometheus
-    redis: ''

@@ -1,4 +1,0 @@
-redis
-omniconf
-python-dotenv
-flask

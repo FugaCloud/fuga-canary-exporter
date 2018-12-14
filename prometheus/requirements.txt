@@ -1,5 +1,0 @@
-requests
-bs4
-redis
-omniconf
-python-dotenv
