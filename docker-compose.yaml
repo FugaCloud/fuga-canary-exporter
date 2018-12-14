@@ -15,4 +15,4 @@ services:
     container_name: ping
     ports:
       - 8000:8000
-    command: gunicorn 'ping_exporter.main:make_app(**{"config":"ping_exporter/configuration.yaml", "instance_name":"guido"})' -b 0.0.0.0:8000
+    command: gunicorn 'ping_exporter.main:make_app(**{"config":"ping_exporter/configuration.yaml"})' -b 0.0.0.0:8000

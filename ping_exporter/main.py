@@ -22,6 +22,7 @@ def load_config(config_path):
 def create_example_config():
     example = {"endpoints": ['https://google.com',
                              'http://prometheus.io'],
+               'instance_name': 'example',
                'pool_size': 5,
                'time_out': 1}
     print(yaml.dump(example, default_flow_style=False))
@@ -30,7 +31,7 @@ def create_example_config():
 def check_config(config):
     required_fields = ['endpoints']
     if config is None:
-        ConfigException('Configfile is empty')
+        raise ConfigException('Configfile is empty')
     if isinstance(config, str):
         raise ConfigException('Config is probably not valid yaml')
     for req_field in required_fields:
@@ -48,26 +49,19 @@ def get_config_from_argv():
         default="configuration.yaml",
         help='path to the config file')
     parser.add_argument(
-        '--instance_name',
-        dest='instance_name',
-        help='the name used in the exporter to identify this instance')
-    parser.add_argument(
         '--generate_config',
         dest='generate_config',
         help='print an example config',
         action='store_true')
-    if len(sys.argv) < 2:
-        parser.print_help()
-        exit(0)
+
     args = parser.parse_args()
     config = load_config(args.config)
     return config, args
 
 
 def get_instance_name():
-    _, args = get_config_from_argv()
-    instance_name = args.instance_name if args.instance_name else ""
-    return instance_name
+    config, _ = get_config_from_argv()
+    return config.get("instance_name", "")
 
 
 if __name__ == "__main__":

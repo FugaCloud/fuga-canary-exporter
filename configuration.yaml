@@ -10,3 +10,4 @@ endpoints:
   - http:/example.com
 pool_size: 5
 time_out: 1
+instance_name: 'guido'

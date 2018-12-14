@@ -27,7 +27,8 @@ def test_pong_against_mock_server_returns_wanted_data(mocker, httpserver):
     assert isinstance(rv[0]['elapsed'], float)
 
 
-def test_pong_against_mock_server_returns_wanted_unserialized_data(mocker, httpserver):
+def test_pong_against_mock_server_returns_wanted_unserialized_data(
+        mocker, httpserver):
     mocker_argv = mocker.patch('ping_exporter.main.get_config_from_argv')
     mocker_argv.return_value = ({}, None)
 

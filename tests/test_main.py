@@ -11,3 +11,13 @@ def test_required_config_check_works():
 
     with pytest.raises(ConfigException):
         check_config(invalid_config)
+
+    invalid_config = None
+
+    with pytest.raises(ConfigException):
+        check_config(invalid_config)
+
+    invalid_config = "not a valid config"
+
+    with pytest.raises(ConfigException):
+        check_config(invalid_config)
