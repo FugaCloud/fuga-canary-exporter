@@ -27,3 +27,15 @@ PYTHONPATH=. python ping_exporter/main.py --generate_config > example-config.yam
 ```
 
 Small side note: if the configuration is updated when the program is running, it will automatically use the new configuration without restarting.
+
+
+
+### Run tests
+
+```
+python3 -m venv env
+. env/bin/activate
+pip install -r requirements.txt -r test-requirements.txt
+PYTHONPATH=. pytest
+deactivate
+```

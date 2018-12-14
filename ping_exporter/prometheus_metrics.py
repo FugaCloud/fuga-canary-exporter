@@ -62,7 +62,7 @@ def make_prometheus_text(return_values):
         for rv in return_values:
             lines.append("{} {}".format(generate_name(
                 attr_name, {"url": rv['url'],
-                            "instance": instance_name}
+                            "instance_name": instance_name}
                 ), rv[item]))
     return lines
 
