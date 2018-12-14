@@ -1,0 +1,7 @@
+endpoints:
+- https://google.com
+- http://prometheus.io
+instance_name: example
+pool_size: 5
+time_out: 1
+
