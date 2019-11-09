@@ -1,4 +1,4 @@
-flask
-grequests
-pyyaml
-gunicorn
+flask==1.1.1
+grequests==0.4.0
+pyyaml==5.1.2
+gunicorn==19.9.0
