@@ -23,7 +23,7 @@ def test_prometheus_text(mocker):
     mock_main_get_config_from_argv = mocker.patch('ping_exporter.main.get_config_from_argv')
     mock_main_get_config_from_argv.return_value = ({}, None)
 
-    text_lines = prometheus_text({'endpoints': []}).splitlines()
+    text_lines = prometheus_text({'endpoints': [], 'dns': {}}).splitlines()
     assert text_lines[0].startswith('# TYPE')
     assert text_lines[1].startswith('# HELP')
     assert text_lines[2].startswith('probe_')
