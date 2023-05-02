@@ -1,4 +1,4 @@
-flask==2.2.2
+flask==2.3.2
 grequests==0.4.0
 pyyaml==5.4
 gunicorn==19.9.0
