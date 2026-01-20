@@ -1,3 +1,5 @@
+**ARCHIVED**. See: https://git.cyso.dev/cyso-cloud/fuga-canary-exporter
+
 # Ping exporter
 
 A prometheus exporter that makes get requests to the different endpoints given in the configuration. The exporter has a 'instance_name' field in the configuration so that this exporter can be run on multiple servers and later can be differentiated. If that last point is not a requirement just use the standard prometheus blackbox exporter.
