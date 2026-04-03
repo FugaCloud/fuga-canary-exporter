@@ -1,4 +1,5 @@
 from ping_exporter.ping import pong, wanted_attributes
+from ping_exporter.dns_ping import dns_ping
 
 
 def generate_name(prefix, extra_tags=None):
@@ -68,6 +69,6 @@ def make_prometheus_text(return_values):
 
 
 def prometheus_text(config):
-    return_values = pong(config['endpoints'])
+    return_values = pong(config['endpoints']) + dns_ping(config['dns'])
     lines = make_prometheus_text(return_values)
     return "\n".join(lines)
